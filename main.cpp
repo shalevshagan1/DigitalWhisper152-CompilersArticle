@@ -73,6 +73,7 @@ public:
             }
             else break;
         }
+
         if (identifierstr == "def")
         {
             return tok_function;
@@ -85,7 +86,7 @@ public:
         std::string num(1, lastchar);
         while (isdigit(lastchar))
         {
-            if (content.length() > 0 && isalnum(content.at(0)))
+            if (isalnum(content.at(0)))
             {
                 lastchar = getnext(content);
                 num += lastchar;
@@ -295,8 +296,7 @@ Value *CallExprAST::codegen()
 
 void GenerateObject(std::string target)
 {
-    try
-    {
+
         InitializeAllTargetInfos();
         InitializeAllTargets();
         InitializeAllTargetMCs();
@@ -322,10 +322,8 @@ void GenerateObject(std::string target)
         TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType);
         pass.run(*TheModule);
         dest.flush();
-    }
-    catch (...)
-    {
-    }
+    
+
 }
 
 void MainLoop(std::string &content)
@@ -347,7 +345,7 @@ void MainLoop(std::string &content)
 }
 
 Function* AddExternalFunc(std::string name) {
-    FunctionType* FuncType = FunctionType::get(Type::getVoidTy(*TheContext), {Type::getInt32Ty(*TheContext)}, false); // signature is: void f(int) 
+    FunctionType* FuncType = FunctionType::get(Type::getInt32Ty(*TheContext), {Type::getInt32Ty(*TheContext)}, false); // signature is: int f(int) 
     return Function::Create(FuncType, Function::ExternalLinkage, name, TheModule.get()); // add function to global module table
 }
 
@@ -372,8 +370,3 @@ int main()
     MainLoop(content);
     GenerateObject("x86_64-pc-windows");
 }
-// int token;
-// do {
-//     token = Lexer::get_token(content);
-//     std::cout << token;
-// } while (token != Lexer::tok_EOF);
