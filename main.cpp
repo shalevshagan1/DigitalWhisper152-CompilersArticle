@@ -296,7 +296,6 @@ Value *CallExprAST::codegen()
 
 void GenerateObject(std::string target)
 {
-
         InitializeAllTargetInfos();
         InitializeAllTargets();
         InitializeAllTargetMCs();
@@ -322,8 +321,6 @@ void GenerateObject(std::string target)
         TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType);
         pass.run(*TheModule);
         dest.flush();
-    
-
 }
 
 void MainLoop(std::string &content)
